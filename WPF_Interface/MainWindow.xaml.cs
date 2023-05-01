@@ -1,28 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Win32;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace WPF_Interface
+namespace TextEditor
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        private void New_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.Text = "";
+        }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filename = openFileDialog.FileName;
+                textBox.Text = File.ReadAllText(filename);
+            }
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    filename = saveFileDialog.FileName;
+                }
+            }
+            File.WriteAllText(filename, textBox.Text);
+        }
+
+      
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+
+        }
+     
+        private void Copy_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.Copy();
+        }
+
+        private void Paste_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.Paste();
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.SelectedText = "";
+        }
+
+        private void Thin_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.FontWeight = FontWeights.Thin;
+        }
+
+        private void Normal_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.FontWeight = FontWeights.Normal;
+        }
+
+        private void Bold_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.FontWeight = FontWeights.Bold;
+        }
+
+        private string filename;
+
     }
 }
